@@ -1,3 +1,3 @@
 # Welcome!
 
-Welcome to my website found [here](swigland.com).
+Welcome to my website found [here](http://swigland.com).
