@@ -73,3 +73,11 @@ body {
 	display: table;
 	clear: both;
 }
+
+/* USED FOR CENTERING CONTENT */
+.center {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	width: 50%
+}

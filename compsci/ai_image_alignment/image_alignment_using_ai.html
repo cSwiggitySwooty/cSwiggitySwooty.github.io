@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset = "utf-8"/>
+		<title>Image Alignment Using AI</title>
+		<link rel="stylesheet" href="../../styles.css">
+		<link rel="icon" href="../../assets/swig_bus.jpg" type="image/x-icon">
+	</head>
+
+	<body>
+		<div class="header" id="myHeader">
+			<a href="../../index.html"><h2>Home</h2></a>
+			<a href="../../about.html"><h2>About Me</h2></a>
+			<a href="../../contact.html"><h2>Contact Information</h2></a>
+			<a class="active" href="../../compsci.html"><h2>Computer Science</h2></a>
+			<a href="../../parkour.html"><h2>Parkour</h2></a>
+			<a href="../../music.html"><h2>Music</h2></a>
+		</div>
+
+		<div class="content" id="myContent">
+			<!-- BACKGROUND -->
+			<h1><u>Background</u></h1>
+            <p>
+                My junior year, I decided to take a class on Artificial Intelligence (CSCE 580).
+                I assumed it would be interesting and that I would find some motivation to continue the computer science field.
+                I don't think I could be more wrong.
+                The class was extremely bland, and I don't feel like I learned much at all.
+                The one interesting thing, however, was the final project.
+                I worked with a graduate student who had already begun the project but hadn't gotten too far.
+                For his project, he has an image of a sheet of metal on a table that is then converted into a height map using a laser.
+                After this, the metal plate is then struck with some sort of impact, and another scan is taken.
+                This results in two images: one that is the unaltered metal plate and another one that is the same plate but after a damage event.
+                Our goal was to isolate the damage that the plate took.
+                In other words, find the difference of the images.
+                However, aligning these images by hand is tedious and wouldn't be very practical.
+                Since this is an AI class, you can only guess what we decided to do.
+				Here is an example of this alignment.
+            </p>
+			<img src="gen1img3.png" alt="Example Alignment Image" class="center">
+
+			<!-- GENETIC ALGORITHM INFORMATION -->
+			<h1><u>Genetic Algorithms</u></h1>
+			<p>
+				The best way we sought to do this was through a genetic algorithm.
+				In case you're unfamiliar, a genetic algorithm is an optimization algorithm.
+				Given some scoring function, it will either try to minimize or maximize that function.
+				For us, we needed the difference to be as low as possible, so we were using it in the form of minimzation.
+				A genetic algorithm differs from other optimization algorithms through the use of chromosomes and alleles.
+				Let's say we have some sort of scoring function f(x1, x2, x3, ..., xn).
+				Instead of inputting these separate values into the function, we can instead append them together to form what is known as a chromosome.
+				Therefore, we have c0 = x1|x2|x3|...|xn. A better example can be shown in the image below.
+				In this image, you can see that each input variable corresponds to a section in the chromosome.
+			</p>
+			<img src="chromosomestructure.png" alt="Chromosome Structure" class="center">
+			<p>
+				The next important topic in genetic algorithms comes in the form of crossovers.
+				A crossover occurs when two chromosomes swap sections with one another, as shown in the image below.
+			</p>
+			<img src="crossover.png" alt="Genetic Algorithm Crossover" class="center">
+			<p>
+				Apologies for the blurriness, but I'm not bothered enough to fix it.
+				However, you can see here that P1 and P2 are swapping sections with each other to produce two children: C1 and C2.
+				This can usually transcend allele boundaries, but for our project, we made it so that we would only swap entire alleles or none at all.
+			</p>
+			<p>
+				The final thing to talk about before we get into our project is mutation.
+				Mutation is simple really. Every generation, a single bit has the chance to swap to the opposite vale.
+				For an example, see the image below.
+			</p>
+			<img src="mutation.png" alt="Genetic Algorithm Mutation" class="center">
+			<p>
+				Again, sorry for the blurriness, but I really don't care.
+				In this case, the 14th bit is swapping from a 0 to a 1.
+				This is in an attempt to keep the system from going sterile and not producing any unique children.
+			</p>
+			<p>
+				Now that we've covered the basics of genetic algorithms, we can finally get into our implementation for this problem.
+			</p>
+
+			<!-- GENERATION 1 IMPLEMENTATION -->
+			<h1><u>Generation 1 Implementation</u></h1>
+			<p>
+				For our first attempt at this problem, we decided to go with 8 alleles, each 8 bits in size.
+				This results in a 64 bit string that we can use for input into our evaluation function (which I will not go into here).
+			</p>
+
+			<!-- GENERATION 2 IMPLEMENTATION -->
+			<h1><u>Generation 2 Implementation</u></h1>
+			<p>
+
+			</p>
+
+			<!-- GENERATION 3 IMPLEMENTATION -->
+			<h1><u>Generation 3 Implementation</u></h1>
+			<p>
+				
+			</p>
+		</div>
+	</body>
+</html>
