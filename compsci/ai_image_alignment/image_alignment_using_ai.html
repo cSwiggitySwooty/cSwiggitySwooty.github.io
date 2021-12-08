@@ -19,6 +19,14 @@
 		</div>
 
 		<div class="content" id="myContent">
+			<h1><u>Quick Note</u></h1>
+			<p>
+				This page is an adaptation of a page that me and a peer wrote for my Artificial Intelligence (CSCE 580) course at the University of South Carolina.
+				This paper can be found [HERE] for those curious enough to read it.
+				However, almost all of the information detailed within said paper will be in this page as well, so unless you're just dying of curiosity, there isn't really a reason to read it.
+				Also, the paper assumes prior knowledge whereas this page assumes a reader with minimal computer science knowledge.
+			</p>
+
 			<!-- BACKGROUND -->
 			<h1><u>Background</u></h1>
             <p>
@@ -74,8 +82,22 @@
 				In this case, the 14th bit is swapping from a 0 to a 1.
 				This is in an attempt to keep the system from going sterile and not producing any unique children.
 			</p>
+
+			<!-- OUR BREEDING MECHANICS -->
+			<h1><u>Breeding Specifics</u></h1>
 			<p>
-				Now that we've covered the basics of genetic algorithms, we can finally get into our implementation for this problem.
+				For each breeding generation, we used a pool of 80 potential configurations (80 different chromosomes).
+				Out of these 80, approximately 40% of the lowest scoring participants were culled (removed from the pool).
+				This left us with around 50 total candidates.
+				Out of these 50, the top 10% were considered the elites, and they were the ones that would breed with the remaining population.
+				This breeding produces 80 more configurations that will then become the next generation.
+			</p>
+			<p>
+				This process of using the elites to breed is called elitism (go figure).
+				The reason for using this method is to try to obtain convergence faster.
+				For those who are unfamiliar, convergence is simply the term used to describe the closing on a minimum/maximum value.
+				In this case, when I refer to convergence, I am referring to how fast the system reaches the ideal set of alleles to get the best possible score in the scoring function.
+				Now that you know how our breeding is done, we can look at the actual implementation.
 			</p>
 
 			<!-- GENERATION 1 IMPLEMENTATION -->
@@ -83,18 +105,92 @@
 			<p>
 				For our first attempt at this problem, we decided to go with 8 alleles, each 8 bits in size.
 				This results in a 64 bit string that we can use for input into our evaluation function (which I will not go into here).
+				The alleles in order are shown below.
+				<ol>
+					<li>Cropping distance from the left side of image one</li>
+					<li>Cropping distance from the right side of image one</li>
+					<li>Cropping distance from the top of image one</li>
+					<li>Cropping distance from the bottom of image one</li>
+					<li>Cropping distance from the left side of image two</li>
+					<li>Cropping distance from the right side of image two</li>
+					<li>Cropping distance from the top of image two</li>
+					<li>Cropping distance from the bottom of image two</li>
+				</ol>
+				Since these alleles are 8 bit integers, we have to understand what they actually mean.
+				If a given allele has the value of 0 (00000000), then it means that there is 0% cropping along that axis.
+				Therefore, a chromosome with the first allele (cropping from left of image 1) being 0 means that the image viewport is on the leftmost border of the original image.
+				If a given allele has a value of 255 (11111111), it means 50% cropping from that side.
+				A chromosome with the first allele being 255 would mean that the left border of the viewport would be in the center of the image.
+			</p>	
+			<p>	
+				From this, we were able to sort of shift around viewports on each of the images and calculate the root mean square error (RMSE) for the scoring function.
+				However, one issue that we found with this was that the RMSE wasn't exactly a good representation of what we were looking for.
+				In the image below, there is a low RMSE, but there is still a lot of noise in the difference image, and the damage isn't perfectly isolated.
+			</p>
+			<img src="gen1results.png" alt="Generation 1 Results" class="center">
+			<p>
+				To remedy this issue, we decided to implement the minimization of variance within our scoring function as well.
+				After this trial, we considered generation 1 of our code to be complete and moved on to the second generation.
+				To get decent results, the genetic algorithm ran for around 12 hours, but we weren't satisfied with those results.
 			</p>
 
 			<!-- GENERATION 2 IMPLEMENTATION -->
 			<h1><u>Generation 2 Implementation</u></h1>
 			<p>
-
+				For generation 2, our main goal was not only to fix the variance issue but to also reduce the time it took to find convergence.
+				To fix the variance was simple. All we needed to do was add it to the scoring function and then attempt to minimize it.
+				We kept the alleles the same from the previous generation as well as the culling and breeding process, so the only thing that changed was the scoring function.
+				Adding in this change immediately reduced the convergence time.
+				It went from around 12 hours to about 4.5 hours.
+				The image below was generated from this generation of the algorithm.
+			</p>
+			<img src="gen2varianceimplementation.png" alt="Generation 2 Results" class="center">
+			<p>
+				As we can see, the image above has less noise going on.
+				This alone was enough to warrant a huge success, but we still thought that there was something we could do to make it better.
+				As such, we decided to change more to attempt to get better convergence.
 			</p>
 
 			<!-- GENERATION 3 IMPLEMENTATION -->
 			<h1><u>Generation 3 Implementation</u></h1>
 			<p>
-				
+				In the third iteration of this project, a lot was changed.
+				The only thing that stayed consistent during this stage was the scoring function (although it was adapted to address the allele changes below).
+				The most noticeable change was the chromosome changes.
+				Up until this point, we were simply using a viewport that was translated and scaled.
+				However, we wanted to implement rotation of said viewport.
+				As such, we had to develop this new system of alleles.
+				<ol>
+					<li>Distance from the bottom of image one</li>
+					<li>Distance from the left of image one</li>
+					<li>Rotation of the viewing box of image one</li>
+					<li>Diagonal length of the viewing box of image one</li>
+					<li>Distance from the bottom of image two</li>
+					<li>Distance from the left of image two</li>
+					<li>Rotation of the viewing box of image two</li>
+					<li>Diagonal length of the viewing box of image two</li>
+				</ol>
+				An example image is shown below.
+			</p>
+			<img src="gen3alleles.png" alt="Generation 3 Alleles" class="center2">
+			<p>
+				In the image above, a1 represents allele 1, a2 represents allele 2, a3 represents allele 3, and a4 represents allele 4.
+				The same structure is used for alleles 5-8, but it is on the altered image rather than the original one.
+			</p>
+			<p>
+				With this implementation, our runtime went down from 4.5 hours to around 3 hours.
+				This wasn't a very large change, so we were relatively unhappy with it.
+				We realized that the best course of action would probably be to speed up image processing.
+				To do this, we decided to only sample every 4th pixel and then interpolate one or two pixels in between.
+				With this change, our runtime went from 3 hours down to around 40 minutes!
+				At this time, we were ecstatic, and we decided to call it success here.
+				An image generated by this iteration of the algorithm is shown below.
+			</p>
+			<img src="gen3example.png" alt="Generation 3 Results" class="center">
+			<p>
+				As we can see, the algorithm correctly found the damage event on the right side of the image.
+				The variance is also better from the first generation on average, and there is only a slight bit of noise in the top left corner.
+				Overall, we were fairly happy with our outcome of the project as we achived what we wanted to.
 			</p>
 		</div>
 	</body>
