@@ -1,3 +1,3 @@
 # Welcome!
 
-Welcome to my website found [here](cSwiggitySwooty.github.io).
+Welcome to my website found [here]( cSwiggitySwooty.github.io).
